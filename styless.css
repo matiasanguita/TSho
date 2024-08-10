@@ -1,0 +1,54 @@
+body {
+    font-family: 'Times New Roman', Times, serif, sans-serif;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.ordenarElJuego {
+    display: grid;
+    grid-template-columns: 4fr 1fr; /* Dos columnas de igual tamaño */
+    gap: 20px; /* Espacio entre columnas */
+}
+
+.zonaDeJuego {
+    position: relative; /* Necesario para que los puntos se posicionen correctamente */
+    width: 2fr;
+    height: 500px;
+    background-color: green;
+    border: 1px solid black;
+}
+
+.punto {
+    position: absolute; /* Necesario para que las coordenadas funcionen */
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+.usuarioStats {
+    text-align: center;
+    padding: 10px;
+}
+
+#usuarioInput {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.buttonUsuario, .buttonReset {
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.puntosContador {
+    margin-top: 10px;
+}
+
+#highscoreHistorico {
+    margin-top: 10px;
+}
