@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let contadorPuntos = document.getElementById('contadorPuntos');
     let botonReset = document.getElementById('resetButton');
     let highscoreHistorico = document.getElementById('highscoreHistorico');
-    let botonResetearHighscore = document.getElementById ('resetearStats');
+    let botonResetearHighscore = document.getElementById('resetearStats');
 
     let puntos = 0;
     let nombreUsuario = localStorage.getItem('nombreUsuario') || '';
@@ -19,12 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function crearPunto() {
         let punto = document.createElement('div');
         punto.classList.add('punto');
-
-        // Establecer la imagen como fondo del div
-        punto.style.backgroundImage = 'url("./assets/img/trumpFace.png")';
-        punto.style.backgroundSize = 'cover';
-        punto.style.width = '50px';
-        punto.style.height = '50px';
 
         let maxX = zonaDeJuego.clientWidth - 50;
         let maxY = zonaDeJuego.clientHeight - 50;
@@ -43,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
             punto.style.backgroundImage = 'url("./assets/img/dead_trump.png")';
             actualizarContador();
 
-            // Esperar time
+            // Esperar tiempo
             setTimeout(function () {
                 zonaDeJuego.removeChild(punto);
                 crearPunto();
@@ -70,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para actualizar el highscore
     function actualizarHighscore() {
         if (puntos > highscore.score) {
-            let fecha = DateTime.now().toLocaleString(DateTime.DATETIME_MED);
+            let fecha = DateTime.now().toLocaleString(DateTime.DATETIME_short);
             highscore = { score: puntos, user: nombreUsuario, date: fecha };
             localStorage.setItem('highscore', JSON.stringify(highscore));
             highscoreHistorico.textContent = `El highscore es ${highscore.score} por ${highscore.user} en la fecha ${highscore.date}.`;
@@ -123,18 +117,19 @@ document.addEventListener('DOMContentLoaded', function () {
         mensajeBienvenida.textContent = '¡Bienvenido de nuevo, ' + nombreUsuario + '!';
         actualizarContador();
     }
+
     function mostrarHighscore() {
         highscoreHistorico.textContent = `El highscore es ${highscore.score} por ${highscore.user} en la fecha ${highscore.date}.`
     }
 
-
     // Mostrar el highscore almacenado
-mostrarHighscore();
+    mostrarHighscore();
 
-    //Resetear Stats localStorage.clear() para todo el sitio, pero mejor solo sacar el highscore
-botonResetearHighscore.addEventListener('click', ()=> {localStorage.removeItem('highscore');
-highscore = { score: 0, user: '', date: '' };
-manejarReset()
-mostrarHighscore()}
-);
+    // Resetear Stats (solo el highscore)
+    botonResetearHighscore.addEventListener('click', () => {
+        localStorage.removeItem('highscore');
+        highscore = { score: 0, user: '', date: '' };
+        manejarReset();
+        mostrarHighscore();
+    });
 });
