@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const DateTime = luxon.DateTime;
+
     // Elementos del DOM
     let zonaDeJuego = document.querySelector('.zonaDeJuego');
     let inputUsuario = document.getElementById('usuarioInput');
@@ -7,37 +9,50 @@ document.addEventListener('DOMContentLoaded', function () {
     let contadorPuntos = document.getElementById('contadorPuntos');
     let botonReset = document.getElementById('resetButton');
     let highscoreHistorico = document.getElementById('highscoreHistorico');
+    let botonResetearHighscore = document.getElementById ('resetearStats');
 
     let puntos = 0;
     let nombreUsuario = localStorage.getItem('nombreUsuario') || '';
-    let highscore = JSON.parse(localStorage.getItem('highscore')) || { score: 0, user: '' };
+    let highscore = JSON.parse(localStorage.getItem('highscore')) || { score: 0, user: '', date: '' };
 
     // Función para crear un nuevo punto
     function crearPunto() {
         let punto = document.createElement('div');
         punto.classList.add('punto');
-        let maxX = zonaDeJuego.clientWidth - 10;
-        let maxY = zonaDeJuego.clientHeight - 10;
+
+        // Establecer la imagen como fondo del div
+        punto.style.backgroundImage = 'url("./assets/img/trumpFace.png")';
+        punto.style.backgroundSize = 'cover';
+        punto.style.width = '50px';
+        punto.style.height = '50px';
+
+        let maxX = zonaDeJuego.clientWidth - 50;
+        let maxY = zonaDeJuego.clientHeight - 50;
         let x = Math.floor(Math.random() * maxX);
         let y = Math.floor(Math.random() * maxY);
         punto.style.left = `${x}px`;
-        punto.style.top = `${y}px`; 
+        punto.style.top = `${y}px`;
 
+        // Evento para cambiar la imagen al hacer clic y esperar antes de crear el siguiente punto
         punto.addEventListener('click', function () {
             if (nombreUsuario === "MatiasGOD") {
                 puntos += Math.floor(Math.random() * 5 + 1);
             } else {
                 puntos++;
             }
+            punto.style.backgroundImage = 'url("./assets/img/dead_trump.png")';
             actualizarContador();
-            zonaDeJuego.removeChild(punto);
-            crearPunto();
-            actualizarHighscore();
+
+            // Esperar time
+            setTimeout(function () {
+                zonaDeJuego.removeChild(punto);
+                crearPunto();
+                actualizarHighscore();
+            }, 50);
         });
 
         zonaDeJuego.appendChild(punto);
     }
-
 
     // Función para reiniciar el juego
     function resetearJuego() {
@@ -55,9 +70,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para actualizar el highscore
     function actualizarHighscore() {
         if (puntos > highscore.score) {
-            highscore = { score: puntos, user: nombreUsuario };
+            let fecha = DateTime.now().toLocaleString(DateTime.DATETIME_MED);
+            highscore = { score: puntos, user: nombreUsuario, date: fecha };
             localStorage.setItem('highscore', JSON.stringify(highscore));
-            highscoreHistorico.textContent = 'El highscore es ' + highscore.score + ' por ' + highscore.user + '.';
+            highscoreHistorico.textContent = `El highscore es ${highscore.score} por ${highscore.user} en la fecha ${highscore.date}.`;
         }
     }
 
@@ -107,7 +123,18 @@ document.addEventListener('DOMContentLoaded', function () {
         mensajeBienvenida.textContent = '¡Bienvenido de nuevo, ' + nombreUsuario + '!';
         actualizarContador();
     }
+    function mostrarHighscore() {
+        highscoreHistorico.textContent = `El highscore es ${highscore.score} por ${highscore.user} en la fecha ${highscore.date}.`
+    }
+
 
     // Mostrar el highscore almacenado
-    highscoreHistorico.textContent = 'El highscore es ' + highscore.score + ' por ' + highscore.user + '.';
+mostrarHighscore();
+
+    //Resetear Stats localStorage.clear() para todo el sitio, pero mejor solo sacar el highscore
+botonResetearHighscore.addEventListener('click', ()=> {localStorage.removeItem('highscore');
+highscore = { score: 0, user: '', date: '' };
+manejarReset()
+mostrarHighscore()}
+);
 });

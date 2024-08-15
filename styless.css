@@ -1,15 +1,8 @@
-body {
-    font-family: 'Times New Roman', Times, serif, sans-serif;
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-    align-items: center;
-    padding: 5px;
-}
+
 
 .ordenarElJuego {
     display: grid;
-    grid-template-columns: 4fr 1fr; /* Dos columnas de igual tamaño */
+    grid-template-columns: 1fr 1fr; /* Dos columnas de igual tamaño */
     gap: 20px; /* Espacio entre columnas */
 }
 
@@ -51,4 +44,14 @@ body {
 
 #highscoreHistorico {
     margin-top: 10px;
+}
+
+.botonesExtra {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#resetearStats{
+    padding: 5px;
+    margin: 5px;
 }
