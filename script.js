@@ -5,12 +5,10 @@ document.addEventListener('DOMContentLoaded', function () {
     let zonaDeJuego = document.querySelector('.zonaDeJuego');
     let inputUsuario = document.getElementById('usuarioInput');
     let botonEnviar = document.getElementById('enviarButton');
-    let mensajeBienvenida = document.getElementById('mensajeBienvenida');
     let contadorPuntos = document.getElementById('contadorPuntos');
     let botonReset = document.getElementById('resetButton');
     let highscoreHistorico = document.getElementById('highscoreHistorico');
     let botonResetearHighscore = document.getElementById('resetearStats');
-
     let puntos = 0;
     let nombreUsuario = localStorage.getItem('nombreUsuario') || '';
     let highscore = JSON.parse(localStorage.getItem('highscore')) || { score: 0, user: '', date: '' };
@@ -74,7 +72,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para manejar el clic en el área de juego
     function manejarClicEnZonaDeJuego(event) {
         if (!event.target.classList.contains('punto')) {
-            alert('Tu puntaje fue de: ' + puntos);
+            alertify.alert(nombreUsuario + ' perdiste x.x', 'Pero tu puntaje fue de: ' + puntos + '.');
+            // alert('Tu puntaje fue de: ' + puntos);
             puntos = 0;
             actualizarContador();
             resetearJuego();
@@ -87,12 +86,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (nombreUsuario) {
             localStorage.setItem('nombreUsuario', nombreUsuario);
-            mensajeBienvenida.textContent = '¡Bienvenido, ' + nombreUsuario + '!';
             inputUsuario.value = '';
             puntos = 0;
             actualizarContador();
-        } else {
-            mensajeBienvenida.textContent = 'Por favor, ingresa un nombre.';
+            notificaciones("Bienvenido " + nombreUsuario + "!!")
         }
     }
 
@@ -114,13 +111,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Mostrar el nombre de usuario y el contador de puntos si hay un nombre almacenado
     if (nombreUsuario) {
-        mensajeBienvenida.textContent = '¡Bienvenido de nuevo, ' + nombreUsuario + '!';
         actualizarContador();
     }
 
     function mostrarHighscore() {
-        highscoreHistorico.textContent = `El highscore es ${highscore.score} por ${highscore.user} en la fecha ${highscore.date}.`
+        if (highscore.score <= 0 || !highscore.user) {
+            highscoreHistorico.textContent = 'Aún no hay highscore :o';
+        } else {
+            highscoreHistorico.textContent = `El highscore es ${highscore.score} por ${highscore.user} en la fecha ${highscore.date}.`;
+        }
     }
+
 
     // Mostrar el highscore almacenado
     mostrarHighscore();
@@ -129,7 +130,44 @@ document.addEventListener('DOMContentLoaded', function () {
     botonResetearHighscore.addEventListener('click', () => {
         localStorage.removeItem('highscore');
         highscore = { score: 0, user: '', date: '' };
+        notificaciones("Se borro el highscore jiji")
         manejarReset();
         mostrarHighscore();
     });
+
+    //Funcion notificaciones con toastify
+    function notificaciones(text) {
+        Toastify({
+            text: text,
+            className: "tostify",
+            duration: 4000,
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            }
+        }).showToast();
+
+    }
 });
+
+//Cronometro de tiempo segun dificultad
+// facil = no pierde por tiempo
+//medio = pierde en menos de 600 ms
+//pro = pierde en menos de 300 ms
+//aimbot = pierde en menos de 100 ms 
+// para la versión 2 de la pag
+function dificultadLevel(nivel) {
+    if (nivel === "facil") {
+    }
+    else if (nivel === "medio") {
+    }
+    else if (nivel === "pro") {
+    }
+    //aimbot
+    else {
+    }
+
+}
+
+
+
+
