@@ -72,13 +72,37 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para manejar el clic en el área de juego
     function manejarClicEnZonaDeJuego(event) {
         if (!event.target.classList.contains('punto')) {
-            alertify.alert(nombreUsuario + ' perdiste x.x', 'Pero tu puntaje fue de: ' + puntos + '.');
-            // alert('Tu puntaje fue de: ' + puntos);
-            puntos = 0;
-            actualizarContador();
-            resetearJuego();
+            fetch('https://api.tronalddump.io/random/quote')
+                .then(response => response.json())
+                .then(data => {
+                    const fraseTrump = data.value;
+                    Swal.fire({
+                        html: `
+                            <h2>${nombreUsuario} perdiste x.x</h2>
+                            <img src="./assets/img/trump_wins.webp" alt="Trump Wins" style="width: 100%; margin: 20px 0;">
+                            <p>Pero tu puntaje fue de: ${puntos}.</p>
+                            <p> Trump dijo: ${fraseTrump}. Cuanta sabiduría</p>
+                        `,
+                        width: 600,
+                        padding: "3em",
+                        color: "#716add",
+                    }).then(() => {
+                        // Solo se ejecuta después de que el mensaje de Swal.fire se cierre
+                        actualizarContador();
+                        resetearJuego();
+                        puntos = 0;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
     }
+    
+
+    //Frase de Random de TRUMP
+
+
 
     // Función para manejar el ingreso del nombre de usuario
     function manejarIngresoUsuario() {
@@ -147,26 +171,50 @@ document.addEventListener('DOMContentLoaded', function () {
         }).showToast();
 
     }
-});
 
-//Cronometro de tiempo segun dificultad
-// facil = no pierde por tiempo
-//medio = pierde en menos de 600 ms
-//pro = pierde en menos de 300 ms
-//aimbot = pierde en menos de 100 ms 
-// para la versión 2 de la pag
-function dificultadLevel(nivel) {
-    if (nivel === "facil") {
-    }
-    else if (nivel === "medio") {
-    }
-    else if (nivel === "pro") {
-    }
-    //aimbot
-    else {
-    }
 
-}
+
+    //Funcion que mande el highscore a highscore.json y muestre el top 10 historico esto creo que sera para backend
+
+    //     function enviarHighscore(user, score) {
+    //         const fecha = DateTime.now().toLocaleString(DateTime.DATETIME_SHORT);
+
+    //         fetch('/highscores', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ user, score, date: fecha }),
+    //         })
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 console.log('Highscore guardado:', data);
+    //             })
+    //             .catch((error) => {
+    //                 console.error('Error:', error);
+    //             });
+    //     }
+
+    });
+
+    //Cronometro de tiempo segun dificultad
+    // facil = no pierde por tiempo
+    //medio = pierde en menos de 600 ms
+    //pro = pierde en menos de 300 ms
+    //aimbot = pierde en menos de 100 ms 
+    // para la versión 2 de la pag
+    // function dificultadLevel(nivel) {
+    //     if (nivel === "facil") {
+    //     }
+    //     else if (nivel === "medio") {
+    //     }
+    //     else if (nivel === "pro") {
+    //     }
+    //     //aimbot
+    //     else {
+    //     }
+
+    // }
 
 
 
